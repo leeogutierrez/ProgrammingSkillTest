@@ -4,53 +4,72 @@
 #include <string>
 #include <math.h>
 #include <cmath>
+#include <vector>
 
 using namespace std;
 
+string StringExplode(string str, string separator, vector<string>* results){
+    int found;
+    found = str.find_first_of(separator);
+    while(found != string::npos){
+        if(found > 0){
+            results->push_back(str.substr(0,found));
+        }
+        str = str.substr(found+1);
+        found = str.find_first_of(separator);
+    }
+    if(str.length() > 0){
+        results->push_back(str);
+    }
+}
 
 string ConcatRemove(string s, string t, int k) {
-   int totalLength = s.length() + t.length();
-    if (totalLength <= k) {
-        return "Yes";
-    }
-    
-    int commonLength = 0;
-    for (int i = 0; i <  Math.min(s.length(), t.length()); i++) {
-        if (s.charAt(i) != t.charAt(i)) {
-            break;
+    vector<string> sVec;
+    vector<string> tVec;
+
+    string sArr = StringExplode(s, " ", &sVec);
+    string tArr = StringExplode(t, " ", &tVec);
+    int count = 0;
+    for (int i = 0; i == count && i < s.length(); i++) {
+        if (sArr[i] == tArr[i]) {
+            count++;
         }
-        commonLength++;
-    }  
-    int minOperationCount = totalLength - 2 * commonLength;
+    }
 
-    if(minOperationCount <= k && ((k - minOperationCount) % 2 == 0)) {
+    int tMinusCount = t.length() - count;
+    int sMinusCount = s.length() - count;
+
+    int STK = k - (tMinusCount + sMinusCount);
+
+    if (tMinusCount + sMinusCount < k && t.length() + s.length() > k && STK % 2 != 0) {
+        return "No";
+    } else if (tMinusCount + sMinusCount <= k) {
         return "Yes";
-    } 
-
-    return "No";
+    } else {
+        return "No";
+    }
 }
 
 int main()
 {
-    ofstream fout(getenv("OUTPUT_PATH"));
-
     string s;
-    getline(cin, s);
-
     string t;
-    getline(cin, t);
+    int k;
 
-    string k_temp;
-    getline(cin, k_temp);
+    cout << "Type the value of string S: ";
+    cin >> s;
+    
+    cout << "Type the value of string T: ";
+    cin >> t;
 
-    int k = stoi(ltrim(rtrim(k_temp)));
+    cout << "Type the value of operations (K): ";
+    cin >> k;
 
     string result = ConcatRemove(s, t, k);
 
-    fout << result << "\n";
+    cout << "Result: " << result << "\n";
 
-    fout.close();
-
+    system("PAUSE");
     return 0;
 }
 

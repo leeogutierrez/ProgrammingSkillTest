@@ -11,7 +11,7 @@ int main()
     int i;
   
     cout << "Enter the word you want to calculate the number of strings: ";
-    scanf("%s", var);
+    cin >> var;
   
     for (i = 0; var[i] != '\0'; ++i);
   
